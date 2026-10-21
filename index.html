@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gulafshan Bano — Data Analyst · AI Engineer</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS & Chart.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    #spidey-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .pill-capsule {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+    .pill-capsule:hover {
+      box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1.5px);
+      border-color: #cbd5e1;
+    }
+    .custom-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.25rem;
+      transition: all 0.25s ease;
+    }
+    .custom-card:hover {
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06);
+      border-color: #cbd5e1;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <!-- Interactive Spider-Man Radial Web Canvas -->
+  <canvas id="spidey-canvas"></canvas>
+
+  <!-- Navigation Bar -->
+  <nav class="fixed top-0 left-0 right-0 z-40 px-6 md:px-12 lg:px-20 py-6 flex items-center justify-between">
+    <a href="#top" class="text-2xl font-bold tracking-tight text-slate-950 font-display flex items-center gap-1.5">
+      <span>GB</span>
+      <span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse"></span>
+    </a>
+    <button id="menu-btn" aria-label="Open menu" class="w-11 h-11 rounded-full bg-white border border-slate-200/90 shadow-sm flex items-center justify-center text-slate-800 hover:bg-slate-50 transition cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Slide-out Drawer Navigation -->
+  <div id="drawer" class="fixed inset-y-0 right-0 w-80 bg-white/95 backdrop-blur-xl shadow-2xl border-l border-slate-200 z-50 p-8 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between items-center pb-6 border-b border-slate-100">
+        <span class="font-bold text-slate-900 text-lg">Menu</span>
+        <button id="close-drawer" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="flex flex-col gap-4 mt-8 font-medium text-slate-700">
+        <a href="#top" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">Home</a>
+        <a href="#about" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">About Me</a>
+        <a href="#portfolio" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">Portfolio</a>
+        <a href="#dashboards" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">Project Dashboards</a>
+        <a href="#skills" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">Skills & Education</a>
+        <a href="#resume" class="drawer-link py-2 px-3 rounded-lg hover:bg-slate-100 hover:text-slate-950 transition">Resume</a>
+      </div>
+    </div>
+    <div class="text-xs text-slate-400">
+      Gulafshan Bano · 2026
+    </div>
+  </div>
+
+  <main class="relative z-10">
+
+    <!-- HERO SECTION -->
+    <section id="top" class="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-20 pb-12 text-center max-w-6xl mx-auto">
+      
+      <p class="text-xs sm:text-sm font-semibold tracking-[0.25em] text-slate-500 uppercase mb-4">
+        DATA ANALYST · AI ENGINEER
+      </p>
+
+      <h1 class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-[6.2rem] font-bold tracking-tight text-slate-950 leading-[1.05] max-w-5xl">
+        Hello — It’s<br class="hidden sm:inline"> Gulafshan Bano
+      </h1>
+
+      <div class="flex items-center justify-center gap-10 sm:gap-16 md:gap-24 my-8 md:my-10">
+        <div class="text-center">
+          <div class="font-display text-4xl sm:text-5xl md:text-[3.25rem] font-bold text-slate-950">8.7</div>
+          <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">B.Tech CGPA</div>
+        </div>
+        <div class="text-center">
+          <div class="font-display text-4xl sm:text-5xl md:text-[3.25rem] font-bold text-slate-950">+7</div>
+          <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">IBM Certifications</div>
+        </div>
+        <div class="text-center">
+          <div class="font-display text-4xl sm:text-5xl md:text-[3.25rem] font-bold text-slate-950">84.7%</div>
+          <div class="text-xs sm:text-sm font-medium text-slate-500 mt-1">Model accuracy</div>
+        </div>
+      </div>
+
+      <!-- Contact Capsules -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 max-w-4xl w-full">
+        <a href="mailto:gulafshanbano05@gmail.com" class="pill-capsule px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <span>gulafshanbano05@gmail.com</span>
+        </a>
+
+        <a href="tel:+917376869786" class="pill-capsule px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <span>+91 7376869786</span>
+        </a>
+
+        <div class="pill-capsule px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span>Lucknow, India</span>
+        </div>
+
+        <a href="http://www.linkedin.com/in/gulafshan-bano-337602380" target="_blank" rel="noreferrer" class="pill-capsule px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#0077b5] fill-current shrink-0" viewBox="0 0 24 24">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+
+        <a href="https://github.com/gulafshanbano05-afk" target="_blank" rel="noreferrer" class="pill-capsule px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium text-slate-700 flex items-center gap-2">
+          <svg class="w-4 h-4 text-slate-900 fill-current shrink-0" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+
+      <a href="#about" class="mt-10 px-6 py-2.5 rounded-full bg-slate-900 text-white font-medium text-xs sm:text-sm flex items-center gap-2 hover:bg-slate-800 transition shadow-md">
+        <span>Scroll down</span>
+        <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </a>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-20 px-6 md:px-12 lg:px-20 max-w-6xl mx-auto border-t border-slate-200/80">
+      <div class="mb-10">
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-950">About Me</h2>
+      </div>
+
+      <div class="max-w-4xl text-slate-600 text-base sm:text-lg leading-relaxed mb-10">
+        I’m a Computer Science undergraduate specialising in <strong class="text-slate-900 font-semibold">Data Science and Artificial Intelligence</strong> at Integral University (8.7 CGPA, expected May 2027). I build and deploy production Generative AI, Retrieval-Augmented Generation (RAG), and multi-agent workflows using FastAPI, LangGraph, LangChain, and ChromaDB — alongside exploratory data analysis and predictive machine learning models in Python.
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+        <div class="custom-card p-6">
+          <div class="text-slate-900 font-bold text-base flex items-center gap-2.5">
+            <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <rect x="9" y="9" width="6" height="6"></rect>
+              <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path>
+            </svg>
+            <span>RAG systems</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-2.5 leading-relaxed">
+            Retrieval-augmented assistants built with FastAPI, ChromaDB and LangChain, deployed live on cloud environments.
+          </p>
+        </div>
+
+        <div class="custom-card p-6">
+          <div class="text-slate-900 font-bold text-base flex items-center gap-2.5">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <path d="M16 2v4M8 2v4M3 10h18"></path>
+            </svg>
+            <span>Multi-agent pipelines</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-2.5 leading-relaxed">
+            LangGraph systems with autonomous agents that plan, gather evidence from live web search, and generate cited research reports.
+          </p>
+        </div>
+      </div>
+
+      <!-- Industry Internships -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">INDUSTRY INTERNSHIPS</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="custom-card p-6">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-bold text-slate-950 text-base">Sipher Web Pvt. Ltd</h4>
+              <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                May 2026 – July 2026
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Developed a multi-agent AI research workflow using Python, LangChain, LangGraph, and Streamlit for automated information retrieval, research synthesis, report generation, and citation handling.
+            </p>
+          </div>
+
+          <div class="custom-card p-6">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-bold text-slate-950 text-base">Sipher Web Pvt. Ltd</h4>
+              <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                May 2025 – July 2025
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Applied Python, Pandas, and NLP techniques for text preprocessing, sentiment analysis, and machine learning text classification models.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO SECTION -->
+    <section id="portfolio" class="py-20 px-6 md:px-12 lg:px-20 max-w-6xl mx-auto border-t border-slate-200/80">
+      <div class="mb-12">
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-950">Portfolio</h2>
+        <p class="text-slate-500 text-sm mt-1">Generative AI systems, machine learning models and analytics case studies.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Cortex -->
+        <article class="custom-card p-7 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-900 text-white">Featured</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-slate-950 mb-2">Cortex — AI Productivity & Life Automation Agent</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+              Full-stack AI productivity web app using RAG-based semantic memory retrieval and task prioritisation, with natural language command parsing and focus scheduling.
+            </p>
+            <div class="flex flex-wrap gap-1.5 mb-8">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Python</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">FastAPI</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">ChromaDB</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">RAG</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Tailwind CSS</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-semibold text-slate-900 pt-4 border-t border-slate-100">
+            <a href="https://cortex-ai-agent-cgac.onrender.com" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Live demo</span> 
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            <a href="https://github.com/gulafshanbano05-afk/Cortex-Ai-Agent" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Source code</span>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- AI Research Studio -->
+        <article class="custom-card p-7 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-900 text-white">Featured</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-slate-950 mb-2">AI Research Studio — Multi-Agent Report Generator</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+              Six specialised agents for automated research, writing and citation generation, wrapped in a Streamlit app with verified web retrieval and structured TXT exports.
+            </p>
+            <div class="flex flex-wrap gap-1.5 mb-8">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">LangGraph</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">LangChain</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Groq</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Tavily</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Streamlit</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-semibold text-slate-900 pt-4 border-t border-slate-100">
+            <a href="https://ai-research-studio.streamlit.app/" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Live demo</span> 
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+            <a href="https://github.com/gulafshanbano05-afk/AI_RESEARCH_REPORT_GENERATOR" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Source code</span>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Disease Prediction -->
+        <article class="custom-card p-7 flex flex-col justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold text-slate-950 mb-2 mt-4">Disease Prediction Model — Heart Disease</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+              Logistic Regression and Random Forest models reaching ~84.7% accuracy, with preprocessing and feature-importance analysis to surface key clinical indicators.
+            </p>
+            <div class="flex flex-wrap gap-1.5 mb-8">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Python</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Pandas</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Scikit-learn</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Matplotlib</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-semibold text-slate-900 pt-4 border-t border-slate-100">
+            <a href="https://github.com/gulafshanbano05-afk" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Source code</span>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Google Play Store -->
+        <article class="custom-card p-7 flex flex-col justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold text-slate-950 mb-2 mt-4">Google Play Store Market Analytics</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-6">
+              Exploratory analysis of app data — cleaning, feature transformation and relationships between ratings, reviews, installs and pricing.
+            </p>
+            <div class="flex flex-wrap gap-1.5 mb-8">
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Pandas</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">NumPy</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Matplotlib</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">Seaborn</span>
+              <span class="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-100 text-slate-700">EDA</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-semibold text-slate-900 pt-4 border-t border-slate-100">
+            <a href="https://github.com/gulafshanbano05-afk" target="_blank" rel="noreferrer" class="flex items-center gap-1.5 hover:text-rose-600 transition">
+              <span>Source code</span>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- DASHBOARDS SECTION -->
+    <section id="dashboards" class="py-20 px-6 md:px-12 lg:px-20 max-w-6xl mx-auto border-t border-slate-200/80">
+      <div class="mb-10">
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-950">Project Dashboards</h2>
+        <p class="text-slate-500 text-sm mt-1">Charts from my own work — Play Store EDA and the heart disease prediction model.</p>
+      </div>
+
+      <div class="custom-card p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100">
+          <p class="text-xs sm:text-sm font-medium text-slate-700">
+            Google Play Store EDA — distribution of app ratings across categories.
+          </p>
+          <div class="inline-flex rounded-lg bg-slate-100 p-1 text-xs font-medium">
+            <button id="btn-chart-ratings" class="px-3 py-1.5 rounded-md bg-white text-slate-900 shadow-sm cursor-pointer">User Ratings</button>
+            <button id="btn-chart-installs" class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer">Total Installs</button>
+          </div>
+        </div>
+        <div class="h-72 w-full pt-6">
+          <canvas id="edaChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS & EDUCATION SECTION -->
+    <section id="skills" class="py-20 px-6 md:px-12 lg:px-20 max-w-6xl mx-auto border-t border-slate-200/80">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-950 mb-12">Skills & Education</h2>
+
+      <div class="space-y-6 mb-16">
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Programming</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Python</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Java</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">SQL</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">C</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">JavaScript</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">AI, LLM & RAG</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">ChromaDB</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Vector Embeddings</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">LangChain</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">LangGraph</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Groq</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Prompt Engineering</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Backend & Web</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">FastAPI</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Uvicorn</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">REST APIs</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Streamlit</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">HTML5</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Tailwind CSS</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Data Science & ML</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Pandas</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">NumPy</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Matplotlib</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Seaborn</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Scikit-learn</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">EDA</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Frameworks & Tools</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Tavily</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">MySQL</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Jupyter Notebook</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">VS Code</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Git</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">GitHub</span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-sm">Render</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-200">
+        <!-- Education -->
+        <div class="custom-card p-6 space-y-4">
+          <div class="flex items-center gap-2 text-slate-900 font-bold text-lg">
+            <svg class="w-5 h-5 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            <h3>Education</h3>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-950">B.Tech — Computer Science (Data Science & AI)</h4>
+            <p class="text-slate-600 text-sm mt-0.5">Integral University · <strong class="text-slate-900 font-semibold">8.7 CGPA</strong></p>
+            <p class="text-slate-400 text-xs mt-1">2023 – 2027 (Expected) · Lucknow, India</p>
+          </div>
+          <p class="text-xs text-slate-500 border-t border-slate-100 pt-3">
+            St. John’s School — Intermediate PCM 69.25% · High School 82.40%
+          </p>
+        </div>
+
+        <!-- Certifications (Cleaned of all cite tags) -->
+        <div class="custom-card p-6 space-y-4">
+          <div class="flex items-center gap-2 text-slate-900 font-bold text-lg">
+            <svg class="w-5 h-5 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            <h3>Certifications</h3>
+          </div>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Build Your Chatbot</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Statistics 101</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Data Visualization with Python</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Cloud Application Developer</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Data Science 101</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Artificial Intelligence Analyst</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>IBM — Data Privacy and Fundamentals</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER / RESUME SECTION -->
+    <footer id="resume" class="py-20 px-6 md:px-12 lg:px-20 max-w-6xl mx-auto border-t border-slate-200/80">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-12 border-b border-slate-200">
+        <div>
+          <h2 class="font-display text-2xl font-bold text-slate-950">Resume</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-1">Full CV — education, internships, certifications and technical skills.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="resume-download-trigger" class="px-5 py-2.5 rounded-full bg-slate-900 text-white font-medium text-xs sm:text-sm flex items-center gap-2 hover:bg-slate-800 transition shadow cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download resume</span>
+          </button>
+          
+          <button id="resume-view-trigger" class="px-5 py-2.5 rounded-full bg-white border border-slate-200 text-slate-700 font-medium text-xs sm:text-sm flex items-center gap-2 hover:bg-slate-50 transition shadow-sm cursor-pointer">
+            <span>View</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <span>© 2026 Gulafshan Bano</span>
+        <a href="mailto:gulafshanbano05@gmail.com" class="font-medium text-slate-800 hover:text-slate-950 flex items-center gap-1">
+          Let’s work together 
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Canvas Polygonal Mesh Generator
+    const canvas = document.getElementById('spidey-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    let mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initWeb();
+    });
+
+    let webNodes = [];
+    function initWeb() {
+      webNodes = [];
+
+      const centers = [
+        { x: width * 0.08, y: height * 0.12 },
+        { x: width * 0.92, y: height * 0.18 },
+        { x: width * 0.15, y: height * 0.88 },
+        { x: width * 0.85, y: height * 0.82 }
+      ];
+
+      centers.forEach(c => {
+        const spokeCount = 8;
+        const ringCount = 5;
+        const maxR = Math.min(width, height) * 0.45;
+
+        for (let s = 0; s < spokeCount; s++) {
+          const angle = (s / spokeCount) * (Math.PI * 2);
+          for (let r = 1; r <= ringCount; r++) {
+            const radDist = (r / ringCount) * maxR;
+            webNodes.push({
+              x: c.x + Math.cos(angle) * radDist,
+              y: c.y + Math.sin(angle) * radDist,
+              vx: (Math.random() - 0.5) * 0.3,
+              vy: (Math.random() - 0.5) * 0.3,
+            });
+          }
+        }
+      });
+
+      const freeCount = Math.floor((width * height) / 16000);
+      for (let i = 0; i < freeCount; i++) {
+        webNodes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+        });
+      }
+    }
+    initWeb();
+
+    function renderWeb() {
+      ctx.clearRect(0, 0, width, height);
+      const maxConnect = 140;
+
+      for (let i = 0; i < webNodes.length; i++) {
+        const n = webNodes[i];
+        n.x += n.vx;
+        n.y += n.vy;
+
+        if (n.x < 0 || n.x > width) n.vx *= -1;
+        if (n.y < 0 || n.y > height) n.vy *= -1;
+
+        const dMouse = Math.hypot(n.x - mouse.x, n.y - mouse.y);
+        if (dMouse < 160) {
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(225, 29, 72, ${0.45 * (1 - dMouse / 160)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        for (let j = i + 1; j < webNodes.length; j++) {
+          const n2 = webNodes[j];
+          const dist = Math.hypot(n.x - n2.x, n.y - n2.y);
+
+          if (dist < maxConnect) {
+            const alpha = (1 - dist / maxConnect) * 0.40;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(n2.x, n2.y);
+            ctx.strokeStyle = `rgba(148, 163, 184, ${alpha})`;
+            ctx.lineWidth = 0.85;
+            ctx.stroke();
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, 1.4, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(71, 85, 105, 0.6)';
+        ctx.fill();
+      }
+
+      requestAnimationFrame(renderWeb);
+    }
+    renderWeb();
+
+    // Drawer Menu logic
+    const drawer = document.getElementById('drawer');
+    document.getElementById('menu-btn').onclick = () => drawer.classList.remove('translate-x-full');
+    document.getElementById('close-drawer').onclick = () => drawer.classList.add('translate-x-full');
+    document.querySelectorAll('.drawer-link').forEach(link => {
+      link.onclick = () => drawer.classList.add('translate-x-full');
+    });
+
+    // Smart Multi-Path Resume Handler
+    async function getWorkingResumePath() {
+      const candidates = [
+        './Gulafshan_Bano Resume.pdf',
+        './Gulafshan_Bano%20Resume.pdf',
+        './resume.pdf',
+        './Gulafshan-Bano-Resume.pdf'
+      ];
+      for (const path of candidates) {
+        try {
+          const res = await fetch(path, { method: 'HEAD' });
+          if (res.ok) return path;
+        } catch (e) {}
+      }
+      return './Gulafshan_Bano Resume.pdf';
+    }
+
+    document.getElementById('resume-download-trigger').onclick = async function() {
+      const path = await getWorkingResumePath();
+      const a = document.createElement('a');
+      a.href = path;
+      a.download = 'Gulafshan_Bano_Resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    document.getElementById('resume-view-trigger').onclick = async function() {
+      const path = await getWorkingResumePath();
+      window.open(path, '_blank');
+    };
+
+    // Chart.js Setup
+    const chartCtx = document.getElementById('edaChart').getContext('2d');
+    const categories = ['Tools', 'Entertainment', 'Education', 'Productivity', 'Finance', 'Lifestyle', 'Health'];
+    const ratings = [4.3, 4.1, 4.5, 4.4, 4.2, 4.0, 4.6];
+    const installs = [95, 120, 80, 110, 65, 50, 75];
+
+    const edaChart = new Chart(chartCtx, {
+      type: 'bar',
+      data: {
+        labels: categories,
+        datasets: [{
+          label: 'Avg Rating (out of 5.0)',
+          data: ratings,
+          backgroundColor: '#0f172a',
+          borderRadius: 8,
+          barThickness: 28,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: 'rgba(226, 232, 240, 0.6)' }, beginAtZero: false },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    document.getElementById('btn-chart-ratings').onclick = function() {
+      this.className = "px-3 py-1.5 rounded-md bg-white text-slate-900 shadow-sm cursor-pointer";
+      document.getElementById('btn-chart-installs').className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer";
+      edaChart.data.datasets[0].data = ratings;
+      edaChart.data.datasets[0].label = 'Avg Rating (out of 5.0)';
+      edaChart.update();
+    };
+
+    document.getElementById('btn-chart-installs').onclick = function() {
+      this.className = "px-3 py-1.5 rounded-md bg-white text-slate-900 shadow-sm cursor-pointer";
+      document.getElementById('btn-chart-ratings').className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 cursor-pointer";
+      edaChart.data.datasets[0].data = installs;
+      edaChart.data.datasets[0].label = 'Relative Downloads (Index 1-100)';
+      edaChart.update();
+    };
+  </script>
+</body>
+</html>
